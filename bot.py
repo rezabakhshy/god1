@@ -106,7 +106,14 @@ def webtopdf(client,message):
     text=message.text
     chat_id=message.chat.id
     name=text.replace("!pdf ","")
-    Response=requests.post(f"https://api.codebazan.ir/htmltopdf/?type=json&url={name}")
+    tex=name[0:5]
+    if tex=="https":
+        name=name[8:]
+        url1="https://"+name
+    if tex=="http:":
+        name=name[7:]
+        url1="http://"+name
+    Response=requests.post(f"https://api.codebazan.ir/htmltopdf/?type=json&url={url1}")
     tex=Response.json()
     url=tex["result"]["url"]
     pdf=requests.get(url)
