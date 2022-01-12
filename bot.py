@@ -15,20 +15,17 @@ def gif(client,message):
     result=googlesearch.search(text,num_results=10)
     tex=""
     for i in range(1,11):
-        tex+=result[i]+"\n------------------------------------\n"
+        tex+=result[i]+"\n\n__________________________________\n\n"
     client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=tex)
-    
+
 @app.on_message(filters.regex("^!trans ") & filters.me)
 def ocr(client,message):
     text=message.reply_to_message.text
     text2=message.text
     text2=text2.replace("!trans ","")
-    src=text2.split()[0]
-    text2=text2.replace(src,"")
     dest=text2.split()[0]
-    text2=text2.replace(dest,"")
     translator = Translator()
-    result = translator.translate(text, src=src,dest=dest)
+    result = translator.translate(text,dest=dest)
     client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=result.text)
 
 @app.on_message(filters.regex("^!tts$") &  filters.me)
@@ -109,7 +106,7 @@ def webtopdf(client,message):
     text=message.text
     chat_id=message.chat.id
     name=text.replace("!pdf ","")
-    Response=requests.post(f"https://api.codebazan.ir/htmltopdf/?type=json&url=https://{name}")
+    Response=requests.post(f"https://api.codebazan.ir/htmltopdf/?type=json&url={name}")
     tex=Response.json()
     url=tex["result"]["url"]
     pdf=requests.get(url)
@@ -294,6 +291,7 @@ def air(client,message):
 @app.on_message((filters.me) & filters.regex("^!help$"))
 def help(client,message):
     help=""
+    help+="**command:**\n!srch \n**descriptin:**\nget text and show result search\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!trans \n**descriptin:**\nget text and source language and defective language so print trtanslate\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!tts \n**descriptin:**\nget text and send voice text to language english \n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n! \n**descriptin:**\nget text and print it slowly\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
