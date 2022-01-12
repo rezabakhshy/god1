@@ -5,8 +5,19 @@ import requests,time
 import os
 from googletrans import Translator
 from typing import Text
+import googlesearch
 app = Client("my_accound",api_id=13893053,api_hash="f586d92837b0f6eebcaa3e392397f47c")
 
+@app.on_message((filters.me) & filters.regex("^!srch "))
+def gif(client,message):
+    text=message.text
+    text=text[6:]
+    result=googlesearch.search(text,num_results=10)
+    tex=""
+    for i in range(1,11):
+        tex+=result[i]+"\n------------------------------------\n"
+    client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=tex)
+    
 @app.on_message(filters.regex("^!trans ") & filters.me)
 def ocr(client,message):
     text=message.reply_to_message.text
