@@ -12,9 +12,9 @@ app = Client("my_accound",api_id=13893053,api_hash="f586d92837b0f6eebcaa3e392397
 def gif(client,message):
     text=message.text
     text=text[6:]
-    result=googlesearch.search(text,num_results=20)
+    result=googlesearch.search(text,num_results=30)
     tex=""
-    for i in range(1,9):
+    for i in range(1,19):
         tex+=result[i]+"\n\n__________________________________\n\n"
     client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=tex)
 
