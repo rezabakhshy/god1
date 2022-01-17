@@ -117,7 +117,7 @@ def webtopdf(client,message):
     tex=Response.json()
     url=tex["result"]["url"]
     pdf=requests.get(url)
-    time.sleep(1)
+    time.sleep(3)
     namefile="test.pdf"
     with open("webtopdf.pdf","wb") as f:
         f.write(pdf.content)
@@ -235,6 +235,14 @@ def ghazalsaadi(client,message):
     text=f"**عنوان: ** `{title}`\n**غزل: **`{cont}`"
     client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=text)
 
+@app.on_message((filters.me) & filters.regex("!del$"))
+def gif(client,message):
+    message_id=message.message_id
+    chat_id=message.chat.id
+    client.delete_messages(chat_id,message_id)
+    message_id=message.reply_to_message.message_id
+    client.delete_messages(chat_id,message_id)
+
 @app.on_message((filters.me) & filters.regex("^!gif "))
 def gif(client,message):
     text=message.text
@@ -295,9 +303,29 @@ def air(client,message):
     text=f"**استان: ** {ostan}\n**شهر: ** {shahr}\n**          امروز **\n**دما: ** {dama}\n**سرعت باد: ** {sorat}\n**وضعیت هوا: ** {vaziat}\n\n      **فردا **\n**دما: ** {fdama}\n**وضعیت هوا: ** {fvaziat}"
     client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=text)
 
+@app.on_message((filters.me) & filters.regex("!down "))
+def gif(client,message):
+    text=message.text
+    url=text[6:]
+    response=requests.get(url)
+    size=int(response.headers["content-length"])/1024/1024
+    size=str(size)[:5]
+    x=len(url)
+    m=url[x-4:]
+    if m[0]!='.':
+        m=url[x-5:]
+    with open(f"@REZABZ2{m}","wb") as f:
+        f.write(response.content)
+    message_id=message.message_id
+    chat_id=message.chat.id
+    client.send_document(chat_id,f"@REZABZ2{m}",caption=f"\n**NAME:** @REZABZ2{m}\n**SAIZE:** {size} MB")
+    os.remove(f"@REZABZ2{m}")
+
 @app.on_message((filters.me) & filters.regex("^!help$"))
 def help(client,message):
     help=""
+    help+="**command:**\n!down \n**descriptin:**\nget lonk download and upload to telegram\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
+    help+="**command:**\n!del \n**descriptin:**\nget rep;y message and delete message\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!srch \n**descriptin:**\nget text and show result search\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!trans \n**descriptin:**\nget text and source language and defective language so print trtanslate\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!tts \n**descriptin:**\nget text and send voice text to language english \n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
