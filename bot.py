@@ -14,7 +14,7 @@ def gif(client,message):
     text=text[6:]
     result=googlesearch.search(text,num_results=20)
     tex=""
-    for i in range(1,19):
+    for i in range(1,9):
         tex+=result[i]+"\n\n__________________________________\n\n"
     client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=tex)
 
