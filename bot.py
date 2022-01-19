@@ -302,7 +302,7 @@ def air(client,message):
     fvaziat=tex["فردا"]["وضعیت هوا"]
     text=f"**استان: ** {ostan}\n**شهر: ** {shahr}\n**          امروز **\n**دما: ** {dama}\n**سرعت باد: ** {sorat}\n**وضعیت هوا: ** {vaziat}\n\n      **فردا **\n**دما: ** {fdama}\n**وضعیت هوا: ** {fvaziat}"
     client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=text)
-
+    
 @app.on_message((filters.me) & filters.regex("!down "))
 def download(client,message):
     text=message.text
@@ -313,10 +313,14 @@ def download(client,message):
     file_name=os.path.basename(url)
     file=response.raw
     client.edit_message_text(chat_id,message_id,f"👾 **DOWNLOADING...**\n**FILE NAME:** {file_name}\n")
-    with open(file_name,"wb") as f:
-        shutil.copyfileobj(file,f)
+    f = open(file_name, 'wb')
+    for chunk in response.iter_content(chunk_size=512 * 1024): 
+        if chunk: # filter out keep-alive new chunks
+            f.write(chunk)
+    f.close()
     client.edit_message_text(chat_id,message_id,f"👾 **UPLOADING...**\n**FILE NAME:** {file_name}\n")
     client.send_document(chat_id,file_name,reply_to_message_id=message_id)
+    os.remove(file_name)
 
 
 @app.on_message((filters.me) & filters.regex("^!help$"))
