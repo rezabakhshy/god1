@@ -304,26 +304,19 @@ def air(client,message):
     client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=text)
 
 @app.on_message((filters.me) & filters.regex("!down "))
-def gif(client,message):
+def download(client,message):
     text=message.text
     url=text[6:]
     response=requests.get(url,stream=True)
-    size_file=requests.head(url)
-    if (size_file.headers['Content-Length']):
-        siz=size_file.headers['Content-Length']
-        size=round((float(siz)/1024/1024),2)
-    else:
-        size="UNKNOWN"
     message_id=message.message_id
     chat_id=message.chat.id
     file_name=os.path.basename(url)
     file=response.raw
-    client.edit_message_text(chat_id,message_id,f"👾 **DOWNLOADING...**\n**FILE NAME:** {file_name}\n**SIZE:** {size} MB")
+    client.edit_message_text(chat_id,message_id,f"👾 **DOWNLOADING...**\n**FILE NAME:** {file_name}\n")
     with open(file_name,"wb") as f:
         shutil.copyfileobj(file,f)
-    client.edit_message_text(chat_id,message_id,f"👾 **UPLOADING...**\n**FILE NAME:** {file_name}\n**SIZE:** {size} MB")
+    client.edit_message_text(chat_id,message_id,f"👾 **UPLOADING...**\n**FILE NAME:** {file_name}\n")
     client.send_document(chat_id,file_name,reply_to_message_id=message_id)
-    os.remove(file_name)
 
 
 @app.on_message((filters.me) & filters.regex("^!help$"))
