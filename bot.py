@@ -310,13 +310,17 @@ def gif(client,message):
     response=requests.get(url)
     size=int(response.headers["content-length"])/1024/1024
     size=str(size)[:5]
-    file_name=os.path.basename(url)
-    with open(file_name,"wb") as f:
-        shutil.copyfileobj(response.raw,f)
     message_id=message.message_id
     chat_id=message.chat.id
-    client.send_document(chat_id,file_name,caption=f"\n**NAME:** {file_name}\n**SAIZE:** {size} MB")
-    os.remove(file_name)
+    if size!=0:
+        file_name=os.path.basename(url)
+        client.edit_message_text(chat_id,message_id,f"downloading...\n**size:** {size}")
+        with open(file_name,"wb") as f:
+            shutil.copyfileobj(response.raw,f)
+        client.send_document(chat_id,file_name,caption=f"\n**NAME:** {file_name}\n**SAIZE:** {size} MB")
+        os.remove(file_name)
+    else:
+        client.edit_message_text(chat_id,message_id,"size == 0")
 
 
 @app.on_message((filters.me) & filters.regex("^!help$"))
