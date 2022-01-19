@@ -312,7 +312,7 @@ def gif(client,message):
     size=str(size)[:5]
     file_name=os.path.basename(url)
     with open(file_name,"wb") as f:
-        shutil.copyfileobj(response.content,f)
+        shutil.copyfileobj(response.raw,f)
     message_id=message.message_id
     chat_id=message.chat.id
     client.send_document(chat_id,file_name,caption=f"\n**NAME:** {file_name}\n**SAIZE:** {size} MB")
