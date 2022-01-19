@@ -1,7 +1,7 @@
 from pyrogram import Client,filters
 from random import randint
 from gtts import gTTS
-import requests,time
+import requests,time,shutil
 import os
 from googletrans import Translator
 from typing import Text
@@ -312,11 +312,12 @@ def gif(client,message):
     size=str(size)[:5]
     file_name=os.path.basename(url)
     with open(file_name,"wb") as f:
-        f.write(response.content)
+        shutil.copyfileobj(response.content,f)
     message_id=message.message_id
     chat_id=message.chat.id
     client.send_document(chat_id,file_name,caption=f"\n**NAME:** {file_name}\n**SAIZE:** {size} MB")
     os.remove(file_name)
+
 
 @app.on_message((filters.me) & filters.regex("^!help$"))
 def help(client,message):
