@@ -9,7 +9,7 @@ import googlesearch
 app = Client("my_accound",api_id=13893053,api_hash="f586d92837b0f6eebcaa3e392397f47c")
 
 @app.on_message((filters.me) & filters.regex("^!srch "))
-def gif(client,message):
+def search(client,message):
     text=message.text
     text=text[6:]
     result=googlesearch.search(text,num_results=30)
@@ -19,7 +19,7 @@ def gif(client,message):
     client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=tex)
 
 @app.on_message(filters.regex("^!trans ") & filters.me)
-def ocr(client,message):
+def translate(client,message):
     text=message.reply_to_message.text
     text2=message.text
     text2=text2.replace("!trans ","")
@@ -182,7 +182,7 @@ def font(client,message):
     client.edit_message_text(chat_id=message.chat.id,message_id=messag_id,text=result)
      
 @app.on_message((filters.me) & filters.regex("^!fontfa "))
-def font(client,message):
+def fontfa(client,message):
     text=message.text
     messag_id=message.message_id
     text=text.replace("!fontfa ","")
@@ -236,7 +236,7 @@ def ghazalsaadi(client,message):
     client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=text)
 
 @app.on_message((filters.me) & filters.regex("!del$"))
-def gif(client,message):
+def delete_mess(client,message):
     message_id=message.message_id
     chat_id=message.chat.id
     client.delete_messages(chat_id,message_id)
@@ -304,19 +304,20 @@ def air(client,message):
     client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=text)
 
 @app.on_message((filters.me) & filters.regex("!down "))
-def gif(client,message):
+def download(client,message):
     text=message.text
     url=text[6:]
-    response=requests.get(url)
+    response=requests.get(url,stream=True)
     size=int(response.headers["content-length"])/1024/1024
     size=str(size)[:5]
     message_id=message.message_id
     chat_id=message.chat.id
     if size!=0:
         file_name=os.path.basename(url)
-        client.edit_message_text(chat_id,message_id,f"downloading...\n**size:** {size}")
+        file=response.raw
+        client.edit_message_text(chat_id,message_id,f"👾 DOWNLOADING...\n**SIZE:** {size} MB")
         with open(file_name,"wb") as f:
-            shutil.copyfileobj(response.raw,f)
+            shutil.copyfileobj(file,f)
         client.send_document(chat_id,file_name,caption=f"\n**NAME:** {file_name}\n**SAIZE:** {size} MB")
         os.remove(file_name)
     else:
