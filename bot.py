@@ -6,6 +6,7 @@ import os
 from googletrans import Translator
 from typing import Text
 import googlesearch
+from clint.textui import progress
 app = Client("my_accound",api_id=13893053,api_hash="f586d92837b0f6eebcaa3e392397f47c")
 
 @app.on_message((filters.me) & filters.regex("^!srch "))
@@ -313,11 +314,12 @@ def download(client,message):
     file_name=os.path.basename(url)
     file=response.raw
     client.edit_message_text(chat_id,message_id,f"👾 **DOWNLOADING...**\n**FILE NAME:** {file_name}\n")
-    f = open(file_name, 'wb')
-    for chunk in response.iter_content(chunk_size=512 * 1024): 
-        if chunk: # filter out keep-alive new chunks
-            f.write(chunk)
-    f.close()
+    with open(file_name, 'wb') as f:
+        fil_siz=int(response.headers.get('content-length'))
+        for chunk in progress.bar(response.iter_content(chunk_size=1024), expected_size=(fil_siz/1024) + 1): 
+            if chunk:
+                f.write(chunk)
+                f.flush()
     client.edit_message_text(chat_id,message_id,f"👾 **UPLOADING...**\n**FILE NAME:** {file_name}\n")
     client.send_document(chat_id,file_name,reply_to_message_id=message_id)
     os.remove(file_name)
