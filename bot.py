@@ -319,7 +319,7 @@ def download(client,message):
         for chunk in progress.bar(response.iter_content(chunk_size=1024), expected_size=(fil_siz/1024) + 1): 
             if chunk:
                 f.write(chunk)
-                f.flush()
+                client.edit_message_text(chat_id,message_id,f"👾 **DOWNLOADING...**\n {f.flush()}\n**FILE NAME:** {file_name}\n")
     client.edit_message_text(chat_id,message_id,f"👾 **UPLOADING...**\n**FILE NAME:** {file_name}\n")
     client.send_document(chat_id,file_name,reply_to_message_id=message_id)
     os.remove(file_name)
