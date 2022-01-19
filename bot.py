@@ -302,23 +302,23 @@ def air(client,message):
     fvaziat=tex["فردا"]["وضعیت هوا"]
     text=f"**استان: ** {ostan}\n**شهر: ** {shahr}\n**          امروز **\n**دما: ** {dama}\n**سرعت باد: ** {sorat}\n**وضعیت هوا: ** {vaziat}\n\n      **فردا **\n**دما: ** {fdama}\n**وضعیت هوا: ** {fvaziat}"
     client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=text)
-
 @app.on_message((filters.me) & filters.regex("!down "))
-def download(client,message):
+def gif(client,message):
     text=message.text
     url=text[6:]
     response=requests.get(url,stream=True)
-    size=int(response.headers["content-length"])/1024/1024
-    size=str(size)[:5]
+    size_file=requests.head(url)
+    size=int(size_file.headers['Content-Length'])
     message_id=message.message_id
     chat_id=message.chat.id
     if size!=0:
         file_name=os.path.basename(url)
         file=response.raw
-        client.edit_message_text(chat_id,message_id,f"👾 DOWNLOADING...\n**SIZE:** {size} MB")
+        client.edit_message_text(chat_id,message_id,f"👾 **DOWNLOADING...**\n**FILE NAME:** {file_name}\n**SIZE:** {size/1024/1024} MB")
         with open(file_name,"wb") as f:
             shutil.copyfileobj(file,f)
-        client.send_document(chat_id,file_name,caption=f"\n**NAME:** {file_name}\n**SAIZE:** {size} MB")
+        client.edit_message_text(chat_id,message_id,f"👾 **UPLOADING...**\n**FILE NAME:** {file_name}\n**SIZE:** {size/1024/1024} MB")
+        client.send_document(chat_id,file_name,caption=f"\n**NAME:** `{file_name}`\n**SAIZE:** {size/1024/1024} MB",reply_to_message_id=message_id)
         os.remove(file_name)
     else:
         client.edit_message_text(chat_id,message_id,"size == 0")
