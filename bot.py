@@ -304,13 +304,14 @@ def air(client,message):
     client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=text)
 
 @app.on_message((filters.me) & filters.regex("!down "))
-def download(client,message):
+def gif(client,message):
     text=message.text
     url=text[6:]
     response=requests.get(url,stream=True)
     size_file=requests.head(url)
     if (size_file.headers['Content-Length']):
-        size=round((int(size_file)/1024/1024),2)
+        siz=size_file.headers['Content-Length']
+        size=round((float(siz)/1024/1024),2)
     else:
         size="UNKNOWN"
     message_id=message.message_id
