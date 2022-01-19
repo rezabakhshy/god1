@@ -314,12 +314,11 @@ def download(client,message):
     file_name=os.path.basename(url)
     file=response.raw
     client.edit_message_text(chat_id,message_id,f"👾 **DOWNLOADING...**\n**FILE NAME:** {file_name}\n")
-    with open(file_name, 'wb') as f:
-        fil_siz=int(response.headers.get('content-length'))
-        for chunk in progress.bar(response.iter_content(chunk_size=1024), expected_size=(fil_siz/1024) + 1): 
-            if chunk:
-                f.write(chunk)
-                client.edit_message_text(chat_id,message_id,f"👾 **DOWNLOADING...**\n {f.flush()}\n**FILE NAME:** {file_name}\n")
+    f = open(file_name, 'wb')
+    for chunk in response.iter_content(chunk_size=512 * 1024): 
+        if chunk: # filter out keep-alive new chunks
+            f.write(chunk)
+    f.close()
     client.edit_message_text(chat_id,message_id,f"👾 **UPLOADING...**\n**FILE NAME:** {file_name}\n")
     client.send_document(chat_id,file_name,reply_to_message_id=message_id)
     os.remove(file_name)
