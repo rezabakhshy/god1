@@ -7,8 +7,24 @@ from googletrans import Translator
 from typing import Text
 import googlesearch
 from clint.textui import progress
+from moviepy.editor import*
+
 app = Client("my_accound",api_id=13893053,api_hash="f586d92837b0f6eebcaa3e392397f47c")
 
+@app.on_message((filters.me) & filters.regex("!ftog"))
+def f_to_gif(client,message):
+    message_id=message.message_id
+    chat_id=message.chat.id
+    file_id=message.reply_to_message.message_id
+    id=message.reply_to_message.video.file_id
+    client.delete_messages(chat_id,message_id)
+    down=client.download_media(id)
+    clip=VideoFileClip(down)
+    gif=clip.write_gif("nowgif.gif")
+    client.send_animation(chat_id,"nowgif.gif",reply_to_message_id=file_id)
+    os.remove(down)
+    os.remove("nowgif.gif")
+    
 @app.on_message((filters.me) & filters.regex("(s|S)abr"))
 def download_image(client,message):
     message_id=message.message_id
@@ -337,8 +353,9 @@ def download(client,message):
 @app.on_message((filters.me) & filters.regex("^!help$"))
 def help(client,message):
     help=""
-    help+="**command:**\n!down \n**descriptin:**\nget lonk download and upload to telegram\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
-    help+="**command:**\n!del \n**descriptin:**\nget rep;y message and delete message\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
+    help+="**command:**\n!ftog \n**descriptin:**\nconvert replyed movie to gif\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
+    help+="**command:**\n!down \n**descriptin:**\nget link download and upload to telegram\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
+    help+="**command:**\n!del \n**descriptin:**\nget reply message and delete message\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!srch \n**descriptin:**\nget text and show result search\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!trans \n**descriptin:**\nget text and source language and defective language so print trtanslate\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!tts \n**descriptin:**\nget text and send voice text to language english \n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
