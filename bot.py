@@ -35,7 +35,7 @@ def f_to_gif(client,message):
     om.save("nowgif.gif", save_all=True, append_images=list(frames))
     im = Image.open("nowgif.gif")
     frames = ImageSequence.Iterator(im)
-    size = 220, 140
+    size = 240, 160
     frames = thumbnails(frames,size)
     om = next(frames) # Handle first frame separately
     om.info = im.info # Copy sequence info
