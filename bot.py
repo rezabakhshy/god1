@@ -16,36 +16,30 @@ def thumbnails(frames,size):
         thumbnail = frame.copy()
         thumbnail.thumbnail(size, Image.ANTIALIAS)
         yield thumbnail
-
 @app.on_message((filters.me) & filters.regex("!ftog"))
 def f_to_gif(client,message):
-    message_id=message.message_id
-    chat_id=message.chat.id
-    file_id=message.reply_to_message.message_id
-    id=message.reply_to_message.video.file_id
-    client.delete_messages(chat_id,message_id)
-    down=client.download_media(id)
-    clip=VideoFileClip(down)
-    clip.write_gif("nowgif.gif")
-    im = Image.open("nowgif.gif")
-    frames = ImageSequence.Iterator(im)
-    size = 320, 240
-    frames = thumbnails(frames,size)
-    om = next(frames) # Handle first frame separately
-    om.info = im.info # Copy sequence info
-    om.save("out.gif", save_all=True, append_images=list(frames))
-    im = Image.open("out.gif")
-    frames = ImageSequence.Iterator(im)
-    size=240,160
-    frames = thumbnails(frames,size)
-    om = next(frames) # Handle first frame separately
-    om.info = im.info # Copy sequence info
-    om.save("out2.gif", save_all=True, append_images=list(frames))
-    client.send_animation(chat_id,"out2.gif",reply_to_message_id=file_id)
+    for i in range(0,1000,100):
+        if os.stat("out2.gif").st_size>2*1024:
+            message_id=message.message_id
+            chat_id=message.chat.id
+            file_id=message.reply_to_message.message_id
+            id=message.reply_to_message.video.file_id
+            client.delete_messages(chat_id,message_id)
+            down=client.download_media(id)
+            clip=VideoFileClip(down)
+            clip.write_gif("nowgif.gif")
+            im = Image.open("nowgif.gif")
+            frames = ImageSequence.Iterator(im)
+            size = 320-i, 240-i
+            frames = thumbnails(frames,size)
+            om = next(frames) # Handle first frame separately
+            om.info = im.info # Copy sequence info
+            om.save("nowgif.gif", save_all=True, append_images=list(frames))
+        else:
+            break
+    client.send_animation(chat_id,"nowgif.gif",reply_to_message_id=file_id)
     os.remove(down)
     os.remove("nowgif.gif")
-    os.remove("out.gif")
-    os.remove("out2.gif")
 
     
 @app.on_message((filters.me) & filters.regex("(s|S)abr"))
