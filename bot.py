@@ -18,16 +18,16 @@ def thumbnails(frames,size):
         yield thumbnail
 @app.on_message((filters.me) & filters.regex("!ftog"))
 def f_to_gif(client,message):
+    message_id=message.message_id
+    chat_id=message.chat.id
+    file_id=message.reply_to_message.message_id
+    id=message.reply_to_message.video.file_id
+    client.delete_messages(chat_id,message_id)
+    down=client.download_media(id)
+    clip=VideoFileClip(down)
+    clip.write_gif("nowgif.gif")
     for i in range(0,1000,100):
-        if os.stat("nowgif.gif").st_size>2*1024:
-            message_id=message.message_id
-            chat_id=message.chat.id
-            file_id=message.reply_to_message.message_id
-            id=message.reply_to_message.video.file_id
-            client.delete_messages(chat_id,message_id)
-            down=client.download_media(id)
-            clip=VideoFileClip(down)
-            clip.write_gif("nowgif.gif")
+        if os.stat("nowgif.gif").st_size>2*1024*1024:
             im = Image.open("nowgif.gif")
             frames = ImageSequence.Iterator(im)
             size = 320-i, 240-i
