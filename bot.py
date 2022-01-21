@@ -26,17 +26,20 @@ def f_to_gif(client,message):
     down=client.download_media(id)
     clip=VideoFileClip(down)
     clip.write_gif("nowgif.gif")
-    for i in range(0,1000,1):
-        if os.stat("nowgif.gif").st_size>4*1024*1024 :
-            im = Image.open("nowgif.gif")
-            frames = ImageSequence.Iterator(im)
-            size = 320-i, 240-i
-            frames = thumbnails(frames,size)
-            om = next(frames) # Handle first frame separately
-            om.info = im.info # Copy sequence info
-            om.save("nowgif.gif", save_all=True, append_images=list(frames))
-        else:
-            break
+    im = Image.open("nowgif.gif")
+    frames = ImageSequence.Iterator(im)
+    size = 320, 240
+    frames = thumbnails(frames,size)
+    om = next(frames) # Handle first frame separately
+    om.info = im.info # Copy sequence info
+    om.save("nowgif.gif", save_all=True, append_images=list(frames))
+    im = Image.open("nowgif.gif")
+    frames = ImageSequence.Iterator(im)
+    size = 220, 140
+    frames = thumbnails(frames,size)
+    om = next(frames) # Handle first frame separately
+    om.info = im.info # Copy sequence info
+    om.save("nowgif.gif", save_all=True, append_images=list(frames))
     client.send_animation(chat_id,"nowgif.gif",reply_to_message_id=file_id)
     os.remove(down)
     os.remove("nowgif.gif")
