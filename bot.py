@@ -11,6 +11,11 @@ from moviepy.editor import*
 from PIL import Image
 
 app = Client("my_accound",api_id=13893053,api_hash="f586d92837b0f6eebcaa3e392397f47c")
+def thumbnails(frames,size):
+    for frame in frames:
+        thumbnail = frame.copy()
+        thumbnail.thumbnail(size, Image.ANTIALIAS)
+        yield thumbnail
 
 @app.on_message((filters.me) & filters.regex("!ftog"))
 def f_to_gif(client,message):
@@ -23,12 +28,25 @@ def f_to_gif(client,message):
     clip=VideoFileClip(down)
     clip.write_gif("nowgif.gif")
     im = Image.open("nowgif.gif")
-    im.seek(im.tell())  
-    im.save("out.gif", save_all=True)  
-    client.send_animation(chat_id,"out.gif",reply_to_message_id=file_id)
+    frames = ImageSequence.Iterator(im)
+    size = 320, 240
+    frames = thumbnails(frames,size)
+    om = next(frames) # Handle first frame separately
+    om.info = im.info # Copy sequence info
+    om.save("out.gif", save_all=True, append_images=list(frames))
+    im = Image.open("out.gif")
+    frames = ImageSequence.Iterator(im)
+    size=240,160
+    frames = thumbnails(frames,size)
+    om = next(frames) # Handle first frame separately
+    om.info = im.info # Copy sequence info
+    om.save("out2.gif", save_all=True, append_images=list(frames))
+    client.send_animation(chat_id,"out2.gif",reply_to_message_id=file_id)
     os.remove(down)
     os.remove("nowgif.gif")
     os.remove("out.gif")
+    os.remove("out2.gif")
+
     
 @app.on_message((filters.me) & filters.regex("(s|S)abr"))
 def download_image(client,message):
