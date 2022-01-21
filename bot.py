@@ -8,6 +8,7 @@ from typing import Text
 import googlesearch
 from clint.textui import progress
 from moviepy.editor import*
+from PIL import Image
 
 app = Client("my_accound",api_id=13893053,api_hash="f586d92837b0f6eebcaa3e392397f47c")
 
@@ -20,10 +21,14 @@ def f_to_gif(client,message):
     client.delete_messages(chat_id,message_id)
     down=client.download_media(id)
     clip=VideoFileClip(down)
-    gif=clip.write_gif("nowgif.gif")
-    client.send_animation(chat_id,"nowgif.gif",reply_to_message_id=file_id)
+    clip.write_gif("nowgif.gif")
+    im = Image.open("nowgif.gif")
+    im.seek(im.tell())  
+    im.save("out.gif", save_all=True)  
+    client.send_animation(chat_id,"out.gif",reply_to_message_id=file_id)
     os.remove(down)
     os.remove("nowgif.gif")
+    os.remove("out.gif")
     
 @app.on_message((filters.me) & filters.regex("(s|S)abr"))
 def download_image(client,message):
