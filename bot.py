@@ -19,7 +19,7 @@ def thumbnails(frames,size):
 @app.on_message((filters.me) & filters.regex("!ftog"))
 def f_to_gif(client,message):
     for i in range(0,1000,100):
-        if os.stat("out2.gif").st_size>2*1024:
+        if os.stat("nowgif.gif").st_size>2*1024:
             message_id=message.message_id
             chat_id=message.chat.id
             file_id=message.reply_to_message.message_id
