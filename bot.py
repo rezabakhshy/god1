@@ -7,8 +7,8 @@ from googletrans import Translator
 from typing import Text
 import googlesearch
 from clint.textui import progress
-from moviepy.editor import*
-from PIL import Image
+from moviepy.editor import VideoFileClip
+from PIL import Image, ImageSequence
 
 app = Client("my_accound",api_id=13893053,api_hash="f586d92837b0f6eebcaa3e392397f47c")
 def thumbnails(frames,size):
