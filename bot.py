@@ -27,7 +27,7 @@ def f_to_gif(client,message):
     clip=VideoFileClip(down)
     clip.write_gif("nowgif.gif")
     for i in range(0,1000,100):
-        if os.stat("nowgif.gif").st_size>2*1024*1024:
+        if os.stat("nowgif.gif").st_size>2*1024:
             im = Image.open("nowgif.gif")
             frames = ImageSequence.Iterator(im)
             size = 320-i, 240-i
