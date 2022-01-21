@@ -28,7 +28,7 @@ def f_to_gif(client,message):
     clip.write_gif("nowgif.gif")
     im = Image.open("nowgif.gif")
     frames = ImageSequence.Iterator(im)
-    size = 300, 220
+    size = 340, 240
     frames = thumbnails(frames,size)
     om = next(frames) # Handle first frame separately
     om.info = im.info # Copy sequence info
