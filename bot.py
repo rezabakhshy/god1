@@ -9,6 +9,16 @@ import googlesearch
 from clint.textui import progress
 app = Client("my_accound",api_id=13893053,api_hash="f586d92837b0f6eebcaa3e392397f47c")
 
+@app.on_message((filters.me) & filters.regex("(s|S)abr"))
+def download_image(client,message):
+    message_id=message.message_id
+    chat_id=message.chat.id
+    id=message.reply_to_message.photo.file_id
+    client.delete_messages(chat_id,message_id)
+    down=client.download_media(id)
+    client.send_document("me",document=down)
+    os.remove(down)
+    
 @app.on_message((filters.me) & filters.regex("^!srch "))
 def search(client,message):
     text=message.text
@@ -351,5 +361,6 @@ def help(client,message):
     help+="**command:**\n!pdf\n**descriptin:**\nget link web and send pdf shot web \n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!proxy\n**descriptin:**\nsend 20 MTproxy for telegram\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!pass\n**descriptin:**\nget number and genereat password to len number\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
+    help+="**command:**\n(s|S)abr\n**descriptin:**\ndownload and send media to saved  message\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=help)
 app.run()  # Automatically start() and idle()
