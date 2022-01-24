@@ -11,6 +11,24 @@ from moviepy.editor import VideoFileClip
 from PIL import Image, ImageSequence
 
 app = Client("my_accound",api_id=13893053,api_hash="f586d92837b0f6eebcaa3e392397f47c")
+
+@app.on_message(filters.regex("!stop") & filters.me)
+def conver_webp(c, m):
+    chat_id=m.chat.id
+    message_id=m.message_id
+    id=m.reply_to_message.message_id
+    if (m.reply_to_message.sticker.is_animated) == False:
+        file=m.reply_to_message.sticker.file_id
+        down=c.download_media(file,"sticker.webp")
+        img = Image.open('downloads/sticker.webp').convert("RGBA")
+        img.save("image.png","PNG")
+        c.send_photo(chat_id,img,reply_to_message_id=id)
+        c.send_document(chat_id,document=img,reply_to_message_id=id)
+        os.remove("image.png")
+        os.remove('downloads/sticker.webp')
+    else:
+        c.edit_message_text(chat_id, message_id,"opps...\nthis sticker is animated\nme can convert the stickers that are not animated🥺\n")
+
 def thumbnails(frames,size):
     for frame in frames:
         thumbnail = frame.copy()
