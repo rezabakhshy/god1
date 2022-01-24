@@ -18,12 +18,13 @@ def conver_webp(c, m):
     message_id=m.message_id
     id=m.reply_to_message.message_id
     if (m.reply_to_message.sticker.is_animated) == False:
+        m.delete()
         file=m.reply_to_message.sticker.file_id
         down=c.download_media(file,"sticker.webp")
         img = Image.open('downloads/sticker.webp').convert("RGBA")
         img.save("image.png","PNG")
-        c.send_photo(chat_id,img,reply_to_message_id=id)
-        c.send_document(chat_id,document=img,reply_to_message_id=id)
+        c.send_photo(chat_id,"image.png",reply_to_message_id=id)
+        c.send_document(chat_id,document="image.png",reply_to_message_id=id)
         os.remove("image.png")
         os.remove('downloads/sticker.webp')
     else:
