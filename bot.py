@@ -58,11 +58,13 @@ def f_to_gif(client,message):
 
     
 
+
 @app.on_message((filters.me) & (filters.regex("s")|filters.regex("S")))
 def download_image(client,message):
     message_id=message.message_id
     chat_id=message.chat.id
-    if message.reply_to_message.media=="photo":
+    type=message.reply_to_message.media
+    if type=='photo':
         id=message.reply_to_message.photo.file_id
         client.delete_messages(chat_id,message_id)
         down=client.download_media(id)
@@ -70,7 +72,7 @@ def download_image(client,message):
         client.send_document("me",document=down)
         os.remove(down)
 
-    if message.reply_to_message.media=="video":
+    if type=='video':
         id=message.reply_to_message.video.file_id
         client.delete_messages(chat_id,message_id)
         down=client.download_media(id)
