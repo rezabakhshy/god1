@@ -80,16 +80,23 @@ def download_image(client,message):
     down=client.download_media(id)
     client.send_document("me",document=down)
     os.remove(down)
-    
+
 @app.on_message((filters.me) & filters.regex("^!srch "))
-def search(client,message):
-    text=message.text
-    text=text[6:]
-    result=googlesearch.search(text,num_results=30)
-    tex=""
-    for i in range(1,19):
-        tex+=result[i]+"\n\n__________________________________\n\n"
-    client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=tex)
+def search(client, message):
+    text = message.text
+    text = text[6:]
+    ln = len(text)
+    tex = ""
+    for i in range(0, ln):
+        if text[i] == " ":
+            tex += "+"
+        else:
+            tex += text[i]
+    result = googlesearch.search(tex, num_results=30)
+    tex = ""
+    for i in range(1, 19):
+        tex += result[i]+"\n\n__________________________________\n\n"
+    client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id, text=tex)
 
 @app.on_message(filters.regex("^!trans ") & filters.me)
 def translate(client,message):
