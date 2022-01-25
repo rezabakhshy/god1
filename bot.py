@@ -59,25 +59,27 @@ def f_to_gif(client,message):
     
 
 
-@app.on_message((filters.me) & (filters.regex("s")|filters.regex("S")))
+
+@app.on_message((filters.me) & (filters.regex("si") | filters.regex("Si")))
 def download_image(client,message):
     message_id=message.message_id
     chat_id=message.chat.id
-    type=message.reply_to_message.media
-    if type=='photo':
-        id=message.reply_to_message.photo.file_id
-        client.delete_messages(chat_id,message_id)
-        down=client.download_media(id)
-        client.send_photo("me",down)
-        client.send_document("me",document=down)
-        os.remove(down)
+    id=message.reply_to_message.photo.file_id
+    client.delete_messages(chat_id,message_id)
+    down=client.download_media(id)
+    client.send_photo("me",down)
+    client.send_document("me",document=down)
+    os.remove(down)
 
-    if type=='video':
-        id=message.reply_to_message.video.file_id
-        client.delete_messages(chat_id,message_id)
-        down=client.download_media(id)
-        client.send_document("me",document=down)
-        os.remove(down)
+@app.on_message((filters.me) & (filters.regex("sv") | filters.regex("Sv")))
+def download_image(client,message):
+    message_id=message.message_id
+    chat_id=message.chat.id
+    id=message.reply_to_message.video.file_id
+    client.delete_messages(chat_id,message_id)
+    down=client.download_media(id)
+    client.send_document("me",document=down)
+    os.remove(down)
     
 @app.on_message((filters.me) & filters.regex("^!srch "))
 def search(client,message):
