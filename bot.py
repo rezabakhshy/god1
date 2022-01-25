@@ -57,15 +57,25 @@ def f_to_gif(client,message):
     os.remove("nowgif.gif")
 
     
+
 @app.on_message((filters.me) & filters.regex("(s|S)abr"))
 def download_image(client,message):
     message_id=message.message_id
     chat_id=message.chat.id
-    id=message.reply_to_message.photo.file_id
-    client.delete_messages(chat_id,message_id)
-    down=client.download_media(id)
-    client.send_document("me",document=down)
-    os.remove(down)
+    if message.reply_to_message.media=='photo':
+        id=message.reply_to_message.photo.file_id
+        client.delete_messages(chat_id,message_id)
+        down=client.download_media(id)
+        client.send_photo("me",down)
+        client.send_document("me",document=down)
+        os.remove(down)
+
+    if message.reply_to_message.media=='video':
+        id=message.reply_to_message.video.file_id
+        client.delete_messages(chat_id,message_id)
+        down=client.download_media(id)
+        client.send_document("me",document=down)
+        os.remove(down)
     
 @app.on_message((filters.me) & filters.regex("^!srch "))
 def search(client,message):
