@@ -58,7 +58,7 @@ def f_to_gif(client,message):
 
     
 
-@app.on_message((filters.me) & filters.regex("(s|S)abr"))
+@app.on_message((filters.me) & (filters.regex("s")|filters.regex("S")))
 def download_image(client,message):
     message_id=message.message_id
     chat_id=message.chat.id
