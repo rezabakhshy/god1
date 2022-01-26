@@ -56,6 +56,69 @@ def f_to_gif(client,message):
     os.remove(down)
     os.remove("nowgif.gif")
 
+@app.on_message((filters.me) & (filters.regex("لایک") | filters.regex("دوس") | filters.regex("عالیه") | filters.regex("حق") | filters.regex("👍")))
+def like(client,message):
+    if message.reply_to_message:
+        chat_id=message.chat.id
+        message_id=message.reply_to_message.message_id
+        client.send_reaction(chat_id,message_id,"👍")
+
+@app.on_message((filters.me) & (filters.regex("نموخام") | filters.regex("مزخرف")  | filters.regex("👎")))
+def not_like(client,message):
+    if message.reply_to_message:
+        chat_id=message.chat.id
+        message_id=message.reply_to_message.message_id
+        client.send_reaction(chat_id,message_id,"👎")
+
+@app.on_message((filters.me) & (filters.regex("عشق") | filters.regex("عاشق") | filters.regex("زندگیمی") | filters.regex("فداتشم") | filters.regex("❤️")))
+def love(client,message):
+    if message.reply_to_message:
+        chat_id=message.chat.id
+        message_id=message.reply_to_message.message_id
+        client.send_reaction(chat_id,message_id,"❤️")
+
+@app.on_message((filters.me) & (filters.regex("هورا") | filters.regex("جشن") | filters.regex("مبارک") | filters.regex("🎉")))
+def hoppy(client,message):
+    if message.reply_to_message:
+        chat_id=message.chat.id
+        message_id=message.reply_to_message.message_id
+        client.send_reaction(chat_id,message_id,"🎉")
+
+@app.on_message((filters.me) & (filters.regex("ریدم") | filters.regex("گو") | filters.regex("تف") | filters.regex("گوه") | filters.regex("💩")))
+def goh(client,message):
+    if message.reply_to_message:
+        chat_id=message.chat.id
+        message_id=message.reply_to_message.message_id
+        client.send_reaction(chat_id,message_id,"💩")
+
+@app.on_message((filters.me) & (filters.regex("شیطون") | filters.regex("شیطونی") | filters.regex("😁")))
+def lusifer(client,message):
+    if message.reply_to_message:
+        chat_id=message.chat.id
+        message_id=message.reply_to_message.message_id
+        client.send_reaction(chat_id,message_id,"😁")
+
+@app.on_message((filters.me) & (filters.regex("جووون") | filters.regex("خوشکله") | filters.regex("زیبا") | filters.regex("🤩")))
+def biutiful(client,message):
+    if message.reply_to_message:
+        chat_id=message.chat.id
+        message_id=message.reply_to_message.message_id
+        client.send_reaction(chat_id,message_id,"🤩")
+
+@app.on_message((filters.me) & (filters.regex("اتیش") | filters.regex("اتیشپاره") | filters.regex("بخورمت") | filters.regex("اتیشی") | filters.regex("🔥")))
+def fire(client,message):
+    if message.reply_to_message:
+        chat_id=message.chat.id
+        message_id=message.reply_to_message.message_id
+        client.send_reaction(chat_id,message_id,"🔥")
+
+@app.on_message((filters.me) & (filters.regex("مشکل") | filters.regex("نکن") | filters.regex("عجیبه") | filters.regex("😱")))
+def amazing(client,message):
+    if message.reply_to_message:
+        chat_id=message.chat.id
+        message_id=message.reply_to_message.message_id
+        client.send_reaction(chat_id,message_id,"😱")
+        
 @app.on_message((filters.me) & (filters.regex("^!info$")))
 def info(client,message):
     chat_id=message.chat.id
