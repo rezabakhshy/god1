@@ -118,7 +118,7 @@ def amazing(client,message):
         chat_id=message.chat.id
         message_id=message.reply_to_message.message_id
         client.send_reaction(chat_id,message_id,"😱")
-        
+
 @app.on_message((filters.me) & (filters.regex("^!info$")))
 def info(client,message):
     chat_id=message.chat.id
@@ -131,7 +131,7 @@ def info(client,message):
         text+=f"✏️ **last name:** `{message.reply_to_message.from_user.last_name}`\n"
     text+=f"🆔✝️ **username:** @{message.reply_to_message.from_user.username}\n[👀 SEE PROFILE 👀](tg://openmessage?user_id={message.reply_to_message.from_user.id})"
     if message.reply_to_message.from_user.photo:
-        file=message.reply_to_message.from_user.photo.small_file_id
+        file=message.reply_to_message.from_user.photo.big_file_id
         down=client.download_media(file)
         client.send_document(chat_id,document=down,caption=text,reply_to_message_id=id,parse_mode="markdown")
         os.remove(down)
@@ -152,9 +152,9 @@ def infof(client,message):
         text+=f"✏️ **first name:** `{message.reply_to_message.forward_from.first_name}`\n"
         if message.reply_to_message.forward_from.last_name:
             text+=f"✏️ **last name:** `{message.reply_to_message.forward_from.last_name}`\n"
-        text+=f"🆔✝️ **username:** @{message.reply_to_message.forward_from.username}\n[👀 SEE PROFILE 👀](tg://openmessage?user_id={message.reply_to_message.forward_from.id})"
+        text+=f"🆔✝️ **username:** @{message.reply_to_message.forward_from.username}\n[👀 SEE PROFILE 👀](tg://openmessage?user_id={message.reply_to_message.z.id})"
         if message.reply_to_message.forward_from.photo:
-            file=message.reply_to_message.forward_from.photo.small_file_id
+            file=message.reply_to_message.forward_from.photo.big_file_id
             down=client.download_media(file)
             client.send_document(chat_id,document=down,caption=text,reply_to_message_id=id,parse_mode="markdown")
             os.remove(down)
