@@ -56,50 +56,48 @@ def f_to_gif(client,message):
     os.remove(down)
     os.remove("nowgif.gif")
 
-    
-
 @app.on_message((filters.me) & (filters.regex("^!info$")))
 def info(client,message):
     chat_id=message.chat.id
     message.delete()
     id=message.reply_to_message.message_id
-    text=f"**INFO USER**\n**message id :** `{id}`\n"
-    text+=f"**id:** `{message.reply_to_message.from_user.id}`\n**is contact:** `{message.reply_to_message.from_user.is_contact}`\n"
-    text+=f"**first name:** `{message.reply_to_message.from_user.first_name}`\n"
+    text=f"**INFO USER**\n🆔✝️ **message id :** `{id}`\n"
+    text+=f"🆔 **id:** `{message.reply_to_message.from_user.id}`\n📝 **is contact:** `{message.reply_to_message.from_user.is_contact}`\n"
+    text+=f"✏️ **first name:** `{message.reply_to_message.from_user.first_name}`\n"
     if message.reply_to_message.from_user.last_name:
-        text+=f"**last name:** `{message.reply_to_message.from_user.last_name}`\n"
-    text+=f"**username:** @{message.reply_to_message.from_user.username}\n"
+        text+=f"✏️ **last name:** `{message.reply_to_message.from_user.last_name}`\n"
+    text+=f"🆔✝️ **username:** @{message.reply_to_message.from_user.username}\n[👀 SEE PROFILE 👀](tg://openmessage?user_id={message.reply_to_message.from_user.id})"
     if message.reply_to_message.from_user.photo:
         file=message.reply_to_message.from_user.photo.small_file_id
         down=client.download_media(file)
-        client.send_document(chat_id,document=down,caption=text,reply_to_message_id=id)
+        client.send_document(chat_id,document=down,caption=text,reply_to_message_id=id,parse_mode="markdown")
         os.remove(down)
     else:
-        client.send_message(chat_id,text,reply_to_message_id=id)
+        client.send_message(chat_id,text,reply_to_message_id=id,parse_mode="markdown")
 
 @app.on_message((filters.me) & (filters.regex("^!infof$")))
 def infof(client,message):
     chat_id=message.chat.id
     message.delete()
     id=message.reply_to_message.message_id
-    text=f"**INFO FROM USER**\n**message id :** `{id}`\n"
+    text=f"**INFO FROM USER**\n🆔✝️ **message id :** `{id}`\n"
     if message.reply_to_message.forward_sender_name:
-        text+=f"ooppsss...\nthe sender of this message has locked his profile.\n**name sender message :** `{message.reply_to_message.forward_sender_name}`\n"
+        text+=f"❌🔒 ooppsss... 🔒❌\nthe sender of this message has locked his profile.\n🔏 **name sender message :** `{message.reply_to_message.forward_sender_name}`\n"
         client.send_message(chat_id,text,reply_to_message_id=id)
     else:
-        text+=f"**id:** `{message.reply_to_message.forward_from.id}`\n**is contact:** `{message.reply_to_message.forward_from.is_contact}`\n"
-        text+=f"**first name:** `{message.reply_to_message.forward_from.first_name}`\n"
+        text+=f"🆔 **id:** `{message.reply_to_message.forward_from.id}`\n📝 **is contact:** `{message.reply_to_message.forward_from.is_contact}`\n"
+        text+=f"✏️ **first name:** `{message.reply_to_message.forward_from.first_name}`\n"
         if message.reply_to_message.forward_from.last_name:
-            text+=f"**last name:** `{message.reply_to_message.forward_from.last_name}`\n"
-        text+=f"**username:** @{message.reply_to_message.forward_from.username}\n"
+            text+=f"✏️ **last name:** `{message.reply_to_message.forward_from.last_name}`\n"
+        text+=f"🆔✝️ **username:** @{message.reply_to_message.forward_from.username}\n[👀 SEE PROFILE 👀](tg://openmessage?user_id={message.reply_to_message.from_user.id})"
         if message.reply_to_message.forward_from.photo:
             file=message.reply_to_message.forward_from.photo.small_file_id
             down=client.download_media(file)
-            client.send_document(chat_id,document=down,caption=text,reply_to_message_id=id)
+            client.send_document(chat_id,document=down,caption=text,reply_to_message_id=id,parse_mode="markdown")
             os.remove(down)
         else:
-            client.send_message(chat_id,text,reply_to_message_id=id)
-
+            client.send_message(chat_id,text,reply_to_message_id=id,parse_mode="markdown")
+            
 @app.on_message((filters.me) & (filters.regex("si") | filters.regex("Si")))
 def download_image(client,message):
     message_id=message.message_id
