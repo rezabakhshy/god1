@@ -58,7 +58,47 @@ def f_to_gif(client,message):
 
     
 
+@app.on_message((filters.me) & (filters.regex("^!info$")))
+def info(client,message):
+    chat_id=message.chat.id
+    message.delete()
+    id=message.reply_to_message.message_id
+    text=f"**INFO USER**\n**message id :** `{id}`\n"
+    text+=f"**id:** `{message.reply_to_message.from_user.id}`\n**is contact:** `{message.reply_to_message.from_user.is_contact}`\n"
+    text+=f"**first name:** `{message.reply_to_message.from_user.first_name}`\n"
+    if message.reply_to_message.from_user.last_name:
+        text+=f"**last name:** `{message.reply_to_message.from_user.last_name}`\n"
+    text+=f"**username:** @{message.reply_to_message.from_user.username}\n"
+    if message.reply_to_message.from_user.photo:
+        file=message.reply_to_message.from_user.photo.small_file_id
+        down=client.download_media(file)
+        client.send_document(chat_id,document=down,caption=text,reply_to_message_id=id)
+        os.remove(down)
+    else:
+        client.send_message(chat_id,text,reply_to_message_id=id)
 
+@app.on_message((filters.me) & (filters.regex("^!infof$")))
+def infof(client,message):
+    chat_id=message.chat.id
+    message.delete()
+    id=message.reply_to_message.message_id
+    text=f"**INFO FROM USER**\n**message id :** `{id}`\n"
+    if message.reply_to_message.forward_sender_name:
+        text+=f"ooppsss...\nthe sender of this message has locked his profile.\n**name sender message :** `{message.reply_to_message.forward_sender_name}`\n"
+        client.send_message(chat_id,text,reply_to_message_id=id)
+    else:
+        text+=f"**id:** `{message.reply_to_message.forward_from.id}`\n**is contact:** `{message.reply_to_message.forward_from.is_contact}`\n"
+        text+=f"**first name:** `{message.reply_to_message.forward_from.first_name}`\n"
+        if message.reply_to_message.forward_from.last_name:
+            text+=f"**last name:** `{message.reply_to_message.forward_from.last_name}`\n"
+        text+=f"**username:** @{message.reply_to_message.forward_from.username}\n"
+        if message.reply_to_message.forward_from.photo:
+            file=message.reply_to_message.forward_from.photo.small_file_id
+            down=client.download_media(file)
+            client.send_document(chat_id,document=down,caption=text,reply_to_message_id=id)
+            os.remove(down)
+        else:
+            client.send_message(chat_id,text,reply_to_message_id=id)
 
 @app.on_message((filters.me) & (filters.regex("si") | filters.regex("Si")))
 def download_image(client,message):
@@ -81,6 +121,7 @@ def download_image(client,message):
     client.send_document("me",document=down)
     os.remove(down)
 
+
 @app.on_message((filters.me) & filters.regex("^!srch "))
 def search(client, message):
     text = message.text
@@ -96,7 +137,8 @@ def search(client, message):
     tex = ""
     for i in range(1, 19):
         tex += result[i]+"\n\n__________________________________\n\n"
-    client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id, text=tex)
+    client.edit_message_text(chat_id=message.chat.id,
+                             message_id=message.message_id, text=tex)
 
 @app.on_message(filters.regex("^!trans ") & filters.me)
 def translate(client,message):
@@ -160,6 +202,17 @@ def vazhe(client,message):
     text=f"**فارسی کلمه:** `{fa}`\n**تلفظ کلمه: ** `{en}`\n\n**معنی کلمه در فرهنگ لغت معین: ** `{moein}`\n\n**معنی کلمه در فرهنگ لغت دهخدا: ** `{deh}`\n\n**مترادف و متضاد کلمه: ** `{mo}`"
     client.edit_message_text(chat_id,message_id=message.message_id,text=text)
 
+@app.on_message((filters.me) & filters.regex("^!logo "))
+def logo2(client,message):
+    text=message.text
+    chat_id=message.chat.id
+    name=text.replace("!logo ","")
+    num=randint(58,109)
+    Response=requests.post(f"https://api.codebazan.ir/ephoto/writeText?output=image&effect=create-online-black-and-white-layerlogo-{num}.html&text={name}")
+    with open("logo2.jpg","wb") as f:
+        f.write(Response.content)   
+    client.send_photo(chat_id,"logo2.jpg",reply_to_message_id=message.message_id)
+    os.remove("logo2.jpg")
 
 @app.on_message((filters.me) & filters.regex("^!num "))
 def numtofa(client,message):
@@ -395,6 +448,8 @@ def download(client,message):
 @app.on_message((filters.me) & filters.regex("^!help$"))
 def help(client,message):
     help=""
+    help+="**command:**\n!info \n**descriptin:**\nsend info user replyed message\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
+    help+="**command:**\n!infof \n**descriptin:**\nsend info user forward message\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!stop \n**descriptin:**\nconvert replyed sticker to png\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!ftog \n**descriptin:**\nconvert replyed movie to gif\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!down \n**descriptin:**\nget link download and upload to telegram\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
@@ -416,11 +471,11 @@ def help(client,message):
     help+="**command:**\n!arz\n**descriptin:**\nsend list from name , price and change currency\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!font\n**descriptin:**\nget name or any thing and send difrent fonts\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!fontfa\n**descriptin:**\nget persion text and send difrent font\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
+    help+="**command:**\n!logo\n**descriptin:**\nget text and send logo withe text\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!ttr\n**descriptin:**\nget language and text so send voice text withe input language \n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!pdf\n**descriptin:**\nget link web and send pdf shot web \n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!proxy\n**descriptin:**\nsend 20 MTproxy for telegram\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!pass\n**descriptin:**\nget number and genereat password to len number\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
-    help+="**command:**\n(si|Si)\n**descriptin:**\ndownload and send photo to saved  message\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
-    help+="**command:**\n(sv|Sv)\n**descriptin:**\ndownload and send video to saved  message\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
+    help+="**command:**\n(s|S)\n**descriptin:**\ndownload and send media to saved  message\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=help)
 app.run()  # Automatically start() and idle()
