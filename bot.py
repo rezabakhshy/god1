@@ -12,7 +12,7 @@ from PIL import Image, ImageSequence
 
 app = Client("my_accound",api_id=13893053,api_hash="f586d92837b0f6eebcaa3e392397f47c")
 
-@app.on_message(filters.regex("!stop") & filters.me)
+@app.on_message(filters.regex("!stop$") & filters.me)
 def conver_webp(c, m):
     chat_id=m.chat.id
     message_id=m.message_id
@@ -35,7 +35,7 @@ def thumbnails(frames,size):
         thumbnail = frame.copy()
         thumbnail.thumbnail(size, Image.ANTIALIAS)
         yield thumbnail
-@app.on_message((filters.me) & filters.regex("!ftog"))
+@app.on_message((filters.me) & filters.regex("!ftog$"))
 def f_to_gif(client,message):
     message_id=message.message_id
     chat_id=message.chat.id
