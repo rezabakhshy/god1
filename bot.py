@@ -194,12 +194,11 @@ def search(client, message):
             tex += "+"
         else:
             tex += text[i]
-    result = googlesearch.search(tex, num_results=30)
+    result = googlesearch.search(tex, num_results=20)
     tex = ""
-    for i in range(1, 19):
-        tex += result[i]+"\n\n__________________________________\n\n"
-    client.edit_message_text(chat_id=message.chat.id,
-                             message_id=message.message_id, text=tex)
+    for i in result:
+        tex += i+"\n\n__________________________________\n\n"
+    client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id, text=tex)
 
 @app.on_message(filters.regex("^!trans ") & filters.me)
 def translate(client,message):
