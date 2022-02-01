@@ -11,7 +11,16 @@ from moviepy.editor import VideoFileClip
 from PIL import Image, ImageSequence
 
 app = Client("my_accound",api_id=13893053,api_hash="f586d92837b0f6eebcaa3e392397f47c")
-
+@app.on_message((filters.me) & filters.regex("!get "))
+def f_to_gif(client,message):
+    message_id=message.message_id
+    chat_id=message.chat.id
+    count=message.text[5:]
+    list_id=[]
+    for i in range(message_id,message_id-count,-1):
+        list_id.append(i)
+    client.delete_messages(chat_id,list_id)
+  
 @app.on_message(filters.regex("!stop") & filters.me)
 def conver_webp(c, m):
     chat_id=m.chat.id
@@ -543,7 +552,7 @@ def download(client,message):
 @app.on_message((filters.me) & filters.regex("^!help$"))
 def help(client,message):
     help=""
-    help+="**command:**\n!info \n**descriptin:**\nsend info user replyed message\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
+    help+="get\n**command:**\n!info \n**descriptin:**\nsend info user replyed message\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!infof \n**descriptin:**\nsend info user forward message\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!stop \n**descriptin:**\nconvert replyed sticker to png\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!ftog \n**descriptin:**\nconvert replyed movie to gif\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
