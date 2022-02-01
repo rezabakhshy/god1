@@ -11,14 +11,15 @@ from moviepy.editor import VideoFileClip
 from PIL import Image, ImageSequence
 
 app = Client("my_accound",api_id=13893053,api_hash="f586d92837b0f6eebcaa3e392397f47c")
+
 @app.on_message((filters.me) & filters.regex("!get "))
 def f_to_gif(client,message):
-    message_id=int(message.message_id)
+    message_id=message.message_id
     chat_id=message.chat.id
-    count=int(message.text[5:])
+    count=message.text[5:]
     list_id=[]
-    for i in range(message_id,message_id-count,-1):
-        list_id.append(str(i))
+    for i in range(int(message_id),int(message_id)-int(count),-1):
+        list_id.append(i)
     client.delete_messages(chat_id,list_id)
   
 @app.on_message(filters.regex("!stop") & filters.me)
