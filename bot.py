@@ -84,7 +84,7 @@ def hoppy(client,message):
         message_id=message.reply_to_message.message_id
         client.send_reaction(chat_id,message_id,"🎉")
 
-@app.on_message((filters.me) & (filters.regex("ریدم") | filters.regex("گو") | filters.regex("تف") | filters.regex("گوه") | filters.regex("💩")))
+@app.on_message((filters.me) & (filters.regex("ریدم")| filters.regex("تف") | filters.regex("گوه") | filters.regex("💩")))
 def goh(client,message):
     if message.reply_to_message:
         chat_id=message.chat.id
@@ -118,6 +118,41 @@ def amazing(client,message):
         chat_id=message.chat.id
         message_id=message.reply_to_message.message_id
         client.send_reaction(chat_id,message_id,"😱")
+
+@app.on_message((filters.me) & (filters.regex("مخم ترکید") | filters.regex("این چی بود") | filters.regex("وای خدا") | filters.regex("🤯")))
+def amazing(client,message):
+    if message.reply_to_message:
+        chat_id=message.chat.id
+        message_id=message.reply_to_message.message_id
+        client.send_reaction(chat_id,message_id,"🤯")
+
+@app.on_message((filters.me) & (filters.regex("تشویق") | filters.regex("تکبیر") | filters.regex("افرین") | filters.regex("👏🏻")))
+def amazing(client,message):
+    if message.reply_to_message:
+        chat_id=message.chat.id
+        message_id=message.reply_to_message.message_id
+        client.send_reaction(chat_id,message_id,"👏🏻")
+
+@app.on_message((filters.me) & (filters.regex("فوش") | filters.regex("چرت") | filters.regex("دعوا") | filters.regex("🤬")))
+def amazing(client,message):
+    if message.reply_to_message:
+        chat_id=message.chat.id
+        message_id=message.reply_to_message.message_id
+        client.send_reaction(chat_id,message_id,"🤬")
+
+@app.on_message((filters.me) & (filters.regex("ببخشید") | filters.regex("ببشید") | filters.regex("اشتی") | filters.regex("😢")))
+def amazing(client,message):
+    if message.reply_to_message:
+        chat_id=message.chat.id
+        message_id=message.reply_to_message.message_id
+        client.send_reaction(chat_id,message_id,"🤮")
+
+@app.on_message((filters.me) & (filters.regex("حالم بهم خورد") | filters.regex("چه زشت") | filters.regex("حالت تهوع") | filters.regex("🤮")))
+def amazing(client,message):
+    if message.reply_to_message:
+        chat_id=message.chat.id
+        message_id=message.reply_to_message.message_id
+        client.send_reaction(chat_id,message_id,"😢")
 
 @app.on_message((filters.me) & (filters.regex("^!info$")))
 def info(client,message):
