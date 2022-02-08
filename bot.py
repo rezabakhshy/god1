@@ -197,23 +197,17 @@ def infof(client,message):
         else:
             client.send_message(chat_id,text,reply_to_message_id=id,parse_mode="markdown")
             
-@app.on_message((filters.me) & (filters.regex("^si$") | filters.regex("^Si$")))
+@app.on_message((filters.me) & (filters.regex("^صبر کن دانلود شه$") | filters.regex("^دانلود نمیشه$")))
 def download_image(client,message):
-    message_id=message.message_id
-    chat_id=message.chat.id
     id=message.reply_to_message.photo.file_id
-    client.delete_messages(chat_id,message_id)
     down=client.download_media(id)
     client.send_photo("me",down)
     client.send_document("me",document=down)
     os.remove(down)
 
-@app.on_message((filters.me) & (filters.regex("^sv$") | filters.regex("^Sv$")))
+@app.on_message((filters.me) & (filters.regex("^صبر کن دانلود شود$") | filters.regex("^دانلود نموشه$")))
 def download_image(client,message):
-    message_id=message.message_id
-    chat_id=message.chat.id
     id=message.reply_to_message.video.file_id
-    client.delete_messages(chat_id,message_id)
     down=client.download_media(id)
     client.send_document("me",document=down)
     os.remove(down)
@@ -572,6 +566,6 @@ def help(client,message):
     help+="**command:**\n!pdf\n**descriptin:**\nget link web and send pdf shot web \n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!proxy\n**descriptin:**\nsend 20 MTproxy for telegram\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!pass\n**descriptin:**\nget number and genereat password to len number\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
-    help+="**command:**\n(s|S)\n**descriptin:**\ndownload and send media to saved  message\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
+    help+="**command:**\n(دانلود نمیشه|صبر کن دانلود شه)\n(دانلود نموشه|صبر کن دانلود شود)\n**descriptin:**\ndownload and send media to saved  message\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=help)
 app.run()  # Automatically start() and idle()
